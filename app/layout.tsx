@@ -3,7 +3,14 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./Navbar";
+import { SessionContextProvider } from "@supabase/auth-helpers-react";
+import { createClient } from "@supabase/supabase-js";
+import NextTopLoader from "nextjs-toploader";
 
+const supabase = createClient(
+  "https://gkjgorkxsyckwarzrwsq.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdramdvcmt4c3lja3dhcnpyd3NxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk3MTM1MzIsImV4cCI6MjAyNTI4OTUzMn0.4fYRrMUJG_s2dLxibzMRVAIC4oKw9T0dNrTb18apVMA"
+);
 const inter = Inter({ subsets: ["latin"] });
 
 // export const metadata: Metadata = {
@@ -17,12 +24,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      data-theme={localStorage.getItem("theme") || "light"}
-      lang="en">
+    <html lang="en">
       <body className={inter.className}>
-        <Navbar />
-        <main className="m-5">{children}</main>
+        <NextTopLoader showSpinner={false} />
+        <SessionContextProvider supabaseClient={supabase}>
+          <Navbar />
+          <main className="m-5">{children}</main>
+        </SessionContextProvider>
       </body>
     </html>
   );
